@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CKD Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { max-width: 900px; }
+        .form-label { font-weight: bold; }
+        .result-box { margin-top: 2rem; padding: 1.5rem; border-radius: 0.5rem; }
+        .result-positive { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .result-negative { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Chronic Kidney Disease (CKD) Predictor</h1>
+        
+        <form method="post" class="card p-4 shadow-sm">
+            {% csrf_token %}
+            <div class="row g-3">
+                <!-- Numerical Fields -->
+                <div class="col-md-4">
+                    <label class="form-label">Age</label>
+                    <input type="number" step="any" name="age" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Blood Pressure (mm/Hg)</label>
+                    <input type="number" step="any" name="bp" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Blood Glucose (mgs/dL)</label>
+                    <input type="number" step="any" name="bgr" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Blood Urea (mgs/dL)</label>
+                    <input type="number" step="any" name="bu" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Serum Creatinine (mgs/dL)</label>
+                    <input type="number" step="any" name="sc" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Sodium (mEq/L)</label>
+                    <input type="number" step="any" name="sod" class="form-control" value="135" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Potassium (mEq/L)</label>
+                    <input type="number" step="any" name="pot" class="form-control" value="4.5" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Hemoglobin (gms)</label>
+                    <input type="number" step="any" name="hemo" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Packed Cell Volume (%)</label>
+                    <input type="number" step="any" name="pcv" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">WBC Count (cells/cumm)</label>
+                    <input type="number" step="any" name="wbcc" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">RBC Count (millions/cmm)</label>
+                    <input type="number" step="any" name="rbcc" class="form-control" required>
+                </div>
+
+                <!-- Categorical Fields -->
+                <div class="col-md-4">
+                    <label class="form-label">Specific Gravity</label>
+                    <select name="sg" class="form-select">
+                        <option value="1.005">1.005</option>
+                        <option value="1.010">1.010</option>
+                        <option value="1.015">1.015</option>
+                        <option value="1.020" selected>1.020</option>
+                        <option value="1.025">1.025</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Albumin</label>
+                    <select name="al" class="form-select">
+                        <option value="0.0" selected>0</option>
+                        <option value="1.0">1</option>
+                        <option value="2.0">2</option>
+                        <option value="3.0">3</option>
+                        <option value="4.0">4</option>
+                        <option value="5.0">5</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Sugar</label>
+                    <select name="su" class="form-select">
+                        <option value="0.0" selected>0</option>
+                        <option value="1.0">1</option>
+                        <option value="2.0">2</option>
+                        <option value="3.0">3</option>
+                        <option value="4.0">4</option>
+                        <option value="5.0">5</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Red Blood Cells</label>
+                    <select name="rbc" class="form-select">
+                        <option value="1" selected>Normal</option>
+                        <option value="0">Abnormal</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Pus Cell</label>
+                    <select name="pc" class="form-select">
+                        <option value="1" selected>Normal</option>
+                        <option value="0">Abnormal</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Pus Cell Clumps</label>
+                    <select name="pcc" class="form-select">
+                        <option value="0" selected>Not Present</option>
+                        <option value="1">Present</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Bacteria</label>
+                    <select name="ba" class="form-select">
+                        <option value="0" selected>Not Present</option>
+                        <option value="1">Present</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Hypertension</label>
+                    <select name="htn" class="form-select">
+                        <option value="0" selected>No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Diabetes Mellitus</label>
+                    <select name="dm" class="form-select">
+                        <option value="0" selected>No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Coronary Artery Disease</label>
+                    <select name="cad" class="form-select">
+                        <option value="0" selected>No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Appetite</label>
+                    <select name="appet" class="form-select">
+                        <option value="1" selected>Good</option>
+                        <option value="0">Poor</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Pedal Edema</label>
+                    <select name="pe" class="form-select">
+                        <option value="0" selected>No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Anemia</label>
+                    <select name="ane" class="form-select">
+                        <option value="0" selected>No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Predict</button>
+            </div>
+        </form>
+
+        {% if prediction_text %}
+        <div class="result-box {% if 'Positive' in prediction_text %}result-positive{% else %}result-negative{% endif %}">
+            <h3 class="text-center">{{ prediction_text }}</h3>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
