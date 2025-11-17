@@ -40,92 +40,204 @@
 
       <div id="manualSection">
         <div class="row g-3">
-          <!-- only first few fields shown; repeat same for all -->
-          <!-- Remaining CKD-related fields -->
-<div class="col-md-4">
-  <label class="form-label">Blood Glucose Random (mg/dL)</label>
-  <input id="bgr" type="number" step="any" class="form-control" required>
-  <div id="bgrError" class="error"></div>
+
+  <!-- Numeric Inputs -->
+  <div class="col-md-4">
+    <label class="form-label">Age (years)</label>
+    <input id="age" type="number" step="any" class="form-control" required>
+    <div id="ageError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Blood Pressure (mm/Hg)</label>
+    <input id="bp" type="number" step="any" class="form-control" required>
+    <div id="bpError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Specific Gravity</label>
+    <select id="sg" class="form-select">
+      <option value="1.005">1.005</option>
+      <option value="1.010">1.010</option>
+      <option value="1.015">1.015</option>
+      <option value="1.020" selected>1.020</option>
+      <option value="1.025">1.025</option>
+    </select>
+    <div id="sgError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Albumin</label>
+    <select id="al" class="form-select">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <div id="alError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Sugar</label>
+    <select id="su" class="form-select">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <div id="suError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Red Blood Cells</label>
+    <select id="rbc" class="form-select">
+      <option value="normal">Normal</option>
+      <option value="abnormal">Abnormal</option>
+    </select>
+    <div id="rbcError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Pus Cell</label>
+    <select id="pc" class="form-select">
+      <option value="normal">Normal</option>
+      <option value="abnormal">Abnormal</option>
+    </select>
+    <div id="pcError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Pus Cell Clumps</label>
+    <select id="pcc" class="form-select">
+      <option value="present">Present</option>
+      <option value="notpresent">Not Present</option>
+    </select>
+    <div id="pccError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Bacteria</label>
+    <select id="ba" class="form-select">
+      <option value="present">Present</option>
+      <option value="notpresent">Not Present</option>
+    </select>
+    <div id="baError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Blood Glucose Random (mg/dL)</label>
+    <input id="bgr" type="number" step="any" class="form-control" required>
+    <div id="bgrError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Blood Urea (mg/dL)</label>
+    <input id="bu" type="number" step="any" class="form-control" required>
+    <div id="buError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Serum Creatinine (mg/dL)</label>
+    <input id="sc" type="number" step="any" class="form-control" required>
+    <div id="scError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Sodium (mEq/L)</label>
+    <input id="sod" type="number" step="any" class="form-control" required>
+    <div id="sodError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Potassium (mEq/L)</label>
+    <input id="pot" type="number" step="any" class="form-control" required>
+    <div id="potError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Hemoglobin (g/dL)</label>
+    <input id="hemo" type="number" step="any" class="form-control" required>
+    <div id="hemoError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Packed Cell Volume</label>
+    <input id="pcv" type="number" step="any" class="form-control" required>
+    <div id="pcvError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">White Blood Cell Count</label>
+    <input id="wbcc" type="number" step="any" class="form-control" required>
+    <div id="wbccError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Red Blood Cell Count</label>
+    <input id="rbcc" type="number" step="any" class="form-control" required>
+    <div id="rbccError" class="error"></div>
+  </div>
+
+  <!-- Boolean / Categorical Clinical Indicators -->
+  <div class="col-md-4">
+    <label class="form-label">Hypertension</label>
+    <select id="htn" class="form-select">
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+    <div id="htnError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Diabetes Mellitus</label>
+    <select id="dm" class="form-select">
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+    <div id="dmError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Coronary Artery Disease</label>
+    <select id="cad" class="form-select">
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+    <div id="cadError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Appetite</label>
+    <select id="appet" class="form-select">
+      <option value="good">Good</option>
+      <option value="poor">Poor</option>
+    </select>
+    <div id="appetError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Pedal Edema</label>
+    <select id="pe" class="form-select">
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+    <div id="peError" class="error"></div>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Anemia</label>
+    <select id="ane" class="form-select">
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+    <div id="aneError" class="error"></div>
+  </div>
 </div>
 
-<div class="col-md-4">
-  <label class="form-label">Blood Urea (mg/dL)</label>
-  <input id="bu" type="number" step="any" class="form-control" required>
-  <div id="buError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Serum Creatinine (mg/dL)</label>
-  <input id="sc" type="number" step="any" class="form-control" required>
-  <div id="scError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Sodium (mEq/L)</label>
-  <input id="sod" type="number" step="any" class="form-control" required>
-  <div id="sodError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Potassium (mEq/L)</label>
-  <input id="pot" type="number" step="any" class="form-control" required>
-  <div id="potError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Hemoglobin (g/dL)</label>
-  <input id="hemo" type="number" step="any" class="form-control" required>
-  <div id="hemoError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Packed Cell Volume</label>
-  <input id="pcv" type="number" step="any" class="form-control" required>
-  <div id="pcvError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">White Blood Cell Count</label>
-  <input id="wbcc" type="number" step="any" class="form-control" required>
-  <div id="wbccError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Red Blood Cell Count</label>
-  <input id="rbcc" type="number" step="any" class="form-control" required>
-  <div id="rbccError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Albumin</label>
-  <select id="al" class="form-select">
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-  </select>
-  <div id="alError" class="error"></div>
-</div>
-
-<div class="col-md-4">
-  <label class="form-label">Sugar</label>
-  <select id="su" class="form-select">
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-  </select>
-  <div id="suError" class="error"></div>
-</div>
-
-          <!-- add all your remaining fields here exactly like original file -->
-          <!-- include matching id="fieldname" and <div id="fieldnameError" class="error"></div> -->
-
-        </div>
       </div>
 
       <!-- CSV upload section -->
