@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from collections import Counter
 import seaborn as sns
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import StandardScaler
@@ -28,8 +27,6 @@ def preprocess_data(df):
     """
     Cleans and preprocesses the CKD dataset.
     """
-    print("\n--- Class distribution before SMOTE ---")
-    print(df["class"].value_counts())
     column_mapping = {
         'bp': 'blood_pressure', 'sg': 'specific_gravity', 'al': 'albumin',
         'su': 'sugar', 'rbc': 'red_blood_cells', 'pc': 'pus_cell',
@@ -149,91 +146,6 @@ def main():
     smote = SMOTE(sampling_strategy={0: 500, 1: 500}, random_state=42)
     X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_train)
     print(f"\n--- Data ready. Resampled training shape: {X_train_resampled.shape} ---")
-        # Display before and after SMOTE values
-    print("\n--- Class distribution before SMOTE ---")
-    print(df_clean["classification"].value_counts())
-
-    print("\n--- Class distribution after SMOTE ---")
-    print(y_train_resampled.value_counts())
-
-    class_counts = Counter(y_train_resampled)
-
-# 2. Prepare data for plotting
-# Convert the Counter object to a DataFrame
-    class_df = pd.DataFrame(
-    list(class_counts.items()),
-    columns=['Class', 'Count']
-)
-
-# Map numeric classes to meaningful labels for the plot
-# Assuming 0=CKD and 1=Not CKD based on prior analysis
-    class_df['Class_Label'] = class_df['Class'].map({
-    0: 'CKD (Resampled)',
-    1: 'Not CKD (Resampled)'
-})
-
-# 3. Create the visualization (Count Plot)
-    plt.figure(figsize=(8, 6))
-    ax = sns.barplot(x='Class_Label', y='Count', data=class_df, palette='viridis')
-
-    plt.title('Class Distribution After SMOTE Oversampling', fontsize=14)
-    plt.xlabel('Diagnosis Class', fontsize=12)
-    plt.ylabel('Count (Number of Samples)', fontsize=12)
-    plt.xticks(rotation=0)
-
-# Add counts on top of the bars
-    for p in ax.patches:
-        ax.annotate(f'{int(p.get_height())}', (p.get_x() + p.get_width() / 2., p.get_height()),
-                    ha='center', va='center', xytext=(0, 10), textcoords='offset points')
-
-    plt.tight_layout()
-    plt.savefig('class_distribution_after_smote.png')
-    plt.show()
-
-
-
-
-# -------------------- VISUALIZATIONS --------------------
-
-
-
-    # --- Visualization 2: Relationship between Serum Creatinine ('sc') and CKD ('class') ---
-
-    plt.figure(figsize=(8, 6))
-    # Use a box plot to visualize the distribution of Serum Creatinine (sc) across the two classes
-    sns.boxplot(x='classification', y='serum_creatinine', data=df, palette='Set2')
-
-    plt.title('Serum Creatinine (sc) Distribution by CKD Status', fontsize=14)
-    plt.xlabel('Diagnosis', fontsize=12)
-    plt.ylabel('Serum Creatinine (mg/dL)', fontsize=12)
-    plt.xticks(rotation=0)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-    plt.tight_layout()
-    plt.savefig('creatinine_vs_ckd.png')
-    
-    # --- Visualization 2: Relationship between hemoglobin ('sc') and CKD ('class') ---
-
-    plt.figure(figsize=(8, 6))
-    # Use a box plot to visualize the distribution of Serum Creatinine (sc) across the two classes
-    sns.boxplot(x='classification', y='hemoglobin', data=df, palette='Set2')
-
-    plt.title('Hemoglobin (sc) Distribution by CKD Status', fontsize=14)
-    plt.xlabel('Diagnosis', fontsize=12)
-    plt.ylabel('Hemoglobin (mg/dL)', fontsize=12)
-    plt.xticks(rotation=0)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-    plt.tight_layout()
-    plt.savefig('hemoglobin_vs_ckd.png')
-    plt.show()
-
-
-
-
-
-
-
 
     model_results = []
 
@@ -251,22 +163,10 @@ def main():
     print(f"Random Forest 5-Fold CV Accuracy: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
 
     rf_model.fit(X_train_resampled, y_train_resampled)
-        # Calculate and print training accuracy for Random Forest
-    y_pred_rf_train = rf_model.predict(X_train_resampled)
-    acc_rf_train = accuracy_score(y_train_resampled, y_pred_rf_train)
-    print(f"Random Forest Training Accuracy: {acc_rf_train:.4f}")
-# Evaluate Random Forest
     y_pred_rf_test = rf_model.predict(X_test_scaled)
     y_proba_rf_test = rf_model.predict_proba(X_test_scaled)[:, 1]
     acc_rf = accuracy_score(y_test, y_pred_rf_test)
     print(f"Random Forest Test Accuracy: {acc_rf:.4f}")
-    
-
-        # Classification report for Random Forest
-    print("\n--- Random Forest Classification Report ---")
-    print(classification_report(y_test, y_pred_rf_test, target_names=["Not CKD", "CKD"]))
-
-
     model_results.append(("Random Forest", acc_rf))
     
     # Save Random Forest model
@@ -306,24 +206,11 @@ def main():
         callbacks=[lgb.early_stopping(stopping_rounds=30, verbose=False)]
     )
 
-    # Calculate and print training accuracy for LightGBM
-    y_pred_lgb_train = best_lgb.predict(X_train_final)
-    acc_lgb_train = accuracy_score(y_train_final, y_pred_lgb_train)
-    print(f"LightGBM Training Accuracy: {acc_lgb_train:.4f}")
-
-
     # Evaluate LightGBM
     y_pred_lgb_test = best_lgb.predict(X_test_scaled)
     y_proba_lgb_test = best_lgb.predict_proba(X_test_scaled)[:, 1]
     acc_lgb = accuracy_score(y_test, y_pred_lgb_test)
     print(f"LightGBM Test Accuracy: {acc_lgb:.4f}")
-       
-
-        # Classification report for LightGBM
-    print("\n--- LightGBM Classification Report ---")
-    print(classification_report(y_test, y_pred_lgb_test, target_names=["Not CKD", "CKD"]))
-
-
     print(f"Best iteration: {best_lgb.best_iteration_}")
     model_results.append(("LightGBM", acc_lgb))
     
@@ -333,8 +220,6 @@ def main():
     print("--- Saved LightGBM model to models/lightgbm_model.pkl ---")
     
     plot_confusion_and_roc(y_test, y_pred_lgb_test, y_proba_lgb_test, "LightGBM")
-
-   
 
     # Feature importance
     feature_importances = pd.Series(best_lgb.feature_importances_, index=X.columns)
@@ -352,8 +237,6 @@ def main():
     plt.tight_layout()
     plt.savefig('models/feature_importance_plot.png')
     plt.show()
-
-   
 
     # ---------------- Comparison Summary ----------------
     print("\n\n========== MODEL ACCURACY COMPARISON ==========")
