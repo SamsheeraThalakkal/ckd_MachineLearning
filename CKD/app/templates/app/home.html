@@ -4,137 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CKD Detection System</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary-color: #2563eb; /* Medical Blue */
-            --primary-hover: #1d4ed8;
-            --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #cbebff 100%);
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-        }
-
-        body { 
-            background: var(--bg-gradient);
+        body {
+            margin: 0;
+            padding: 0;
             font-family: 'Inter', sans-serif;
+
+            /* Lighter premium gradient */
+            background: linear-gradient(135deg, #f5e1ff 0%, #e6c8ff 35%, #d1a4ff 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-x: hidden;
         }
 
-        .main-card {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            overflow: hidden;
-            max-width: 900px;
+        /* Main container */
+        .glass-wrapper {
             width: 95%;
+            max-width: 1100px;
             padding: 0;
         }
 
-        .hero-section {
-            padding: 4rem 3rem;
+        /* Glassmorphic card */
+        .glass-card {
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            animation: float 6s ease-in-out infinite;
+            padding: 3rem 3.2rem;
         }
 
-        h1 {
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Left section */
+        .info-section h1 {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            color: var(--text-dark);
-            letter-spacing: -0.5px;
+            font-size: 2.6rem;
+            color: #2d004d;
         }
 
-        .lead {
-            color: var(--text-muted);
-            font-weight: 400;
-            line-height: 1.6;
+        .info-section p.lead {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            max-width: 500px;
+            color: #3a005f;
         }
 
-        /* Icon styling */
-        .icon-badge {
-            background-color: #e0f2fe;
-            color: var(--primary-color);
-            width: 64px;
-            height: 64px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Button Styling */
-        .btn-start {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            border: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-start:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        /* Right section icon */
+        .hero-icon {
+            font-size: 110px;
+            color: #ad00ff;
+            opacity: 0.85;
+            text-shadow: 0 5px 18px rgba(150, 0, 255, 0.4);
         }
 
         /* Feature badges */
         .feature-badge {
-            font-size: 0.85rem;
-            background: #f1f5f9;
-            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.3);
             padding: 8px 16px;
-            border-radius: 8px;
-            margin: 0 5px;
-            display: inline-block;
+            border-radius: 10px;
+            margin-right: 10px;
+            font-size: 0.85rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #3c0060;
+            font-weight: 500;
+        }
+
+        /* Button */
+        .btn-start {
+            background: #b800e6;
+            border: none;
+            padding: 14px 42px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            border-radius: 45px;
+            color: white;
+            transition: 0.3s;
+            box-shadow: 0 6px 20px rgba(185, 0, 230, 0.35);
+        }
+
+        .btn-start:hover {
+            background: #8a00b4;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 26px rgba(170, 0, 220, 0.55);
+        }
+
+        .info-link {
+            color: #7a00a8;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        .info-link:hover {
+            color: #4b006d;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-card fade-in">
-        <div class="row g-0">
-            <div class="col-lg-12">
-                <div class="hero-section text-center">
-                    
-                    <div class="icon-badge">
-                        <i class="fa-solid fa-heart-pulse"></i>
-                    </div>
+    <div class="glass-wrapper">
+        <div class="glass-card">
 
+            <div class="row align-items-center">
+                
+                <!-- Left Section -->
+                <div class="col-lg-7 info-section">
                     <h1 class="mb-3">CKD Risk Prediction</h1>
-                    
-                    <p class="lead mb-4 mx-auto" style="max-width: 600px;">
-                        Leveraging advanced Machine Learning algorithms to assist in the early detection of Chronic Kidney Disease. Input standard medical parameters for an instant risk assessment.
+
+                    <p class="lead">
+                        Early detection of Chronic Kidney Disease (CKD) is crucial. Identifying risk factors at an early stage helps prevent kidney failure and supports better long-term health.
+                        This AI-powered tool assists in screening by analyzing key clinical parameters.
                     </p>
 
-                    <div class="mb-5">
+                    <div class="my-3">
                         <span class="feature-badge"><i class="fa-solid fa-shield-halved me-2"></i>Secure</span>
                         <span class="feature-badge"><i class="fa-solid fa-bolt me-2"></i>Instant Results</span>
-                        <span class="feature-badge"><i class="fa-solid fa-user-doctor me-2"></i>AI Assisted</span>
+                        <span class="feature-badge"><i class="fa-solid fa-microscope me-2"></i>Medical Insights</span>
                     </div>
 
-                    <a href="{% url 'predict' %}" class="btn btn-start">
-                        <i class="fa-solid fa-magnifying-glass-chart me-2"></i> Start Prediction
+                    <a href="{% url 'predict' %}" class="btn btn-start mt-3">
+                        <i class="fa-solid fa-magnifying-glass-chart me-2"></i>Start Prediction
                     </a>
 
-                    <p class="mt-4 text-muted small">
-                        *This tool is for screening purposes only and does not replace professional medical advice.
+                    <p class="mt-4" style="font-size: 0.85rem;">
+                        Learn more about CKD from the official National Kidney Foundation: <br>
+                        <a class="info-link" href="https://www.kidney.org/atoz/content/about-chronic-kidney-disease" target="_blank">www.kidney.org</a>
                     </p>
                 </div>
+
+                <!-- Right Section (Icon / Visual) -->
+                <div class="col-lg-5 text-center">
+                    <i class="fa-solid fa-heart-pulse hero-icon"></i>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

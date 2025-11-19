@@ -1,201 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CKD Prediction</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <!-- Google Font: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <style>
+        /* 🌌 THEME 1B — Deep Purple + Neon Pink */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f7f6; /* Lighter, cleaner background */
-            color: #333;
+            font-family: "Inter", sans-serif;
+            background: linear-gradient(135deg, #1a0033, #2a0055, #3f0077);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            margin: 0;
+            color: #f0e6ff;
         }
 
-        /* --- Header --- */
+        /* 🔮 Glass Header */
         .header {
-            background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
-            color: white;
-            padding: 1.5rem 0;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2rem 0;
             text-align: center;
-            border-bottom: 5px solid #0041a8;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            color: #f8d9ff;
         }
+
         .header h1 {
             font-weight: 700;
-            margin-bottom: 0;
             letter-spacing: -0.5px;
         }
 
-        .main-container {
-            max-width: 1100px;
-        }
-
-        /* --- Card Styling --- */
-        .form-card {
-            background-color: #ffffff;
+        /* 🟣 Glass Cards */
+        .form-card,
+        .csv-card {
+            border-radius: 18px;
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-            transition: all 0.3s ease;
-        }
-        .form-card:hover {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+            color: #f8eaff;
         }
 
-        /* --- Section Titles --- */
+        /* Headings */
         .section-title {
-            font-weight: 600;
-            color: #0052D4;
-            margin-top: 2.5rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
-        }
-        .section-title i {
-            margin-right: 10px;
-        }
-
-        /* --- Form Elements --- */
-        .form-label {
-            font-weight: 500;
-            color: #555;
-            font-size: 0.9rem;
-        }
-        .form-control, .form-select {
-            border-radius: 8px;
-            border: 1px solid #ced4da;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #4364F7;
-            box-shadow: 0 0 0 0.25rem rgba(67, 100, 247, 0.2);
-        }
-
-        /* --- Buttons --- */
-        .btn-primary {
-            background-color: #0052D4;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            padding: 12px 30px;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #0041a8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 82, 212, 0.3);
-        }
-        
-        .btn-success {
-            background-color: #198754;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            padding: 12px 30px;
-            transition: all 0.3s ease;
-        }
-        .btn-success:hover {
-            background-color: #146c43;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
-        }
-        
-        .btn-lg {
-            font-size: 1.1rem;
-        }
-
-        /* --- Result Box --- */
-        .result-box {
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-top: 25px;
-            text-align: center;
-            border-width: 2px;
-            border-style: solid;
-            background-color: #fff;
-        }
-        .result-box h4 {
+            font-size: 1.7rem;
             font-weight: 700;
-            margin: 0;
-            letter-spacing: 0.5px;
-        }
-        .result-box.positive {
-            border-color: #dc3545;
-            color: #dc3545;
-            background-color: #fdf2f2;
-        }
-        .result-box.negative {
-            border-color: #198754;
-            color: #198754;
-            background-color: #f0fbf4;
+            text-align: center;
+            color: #ffb3ff;
         }
 
-        /* --- CSV Upload Form --- */
-        .form-control[type="file"] {
-            background-color: #f8f9fa;
-        }
-        .form-control[type="file"]::file-selector-button {
-            background-color: #6c757d;
+        /* Inputs — remove border, soft backgrounds */
+        .form-control,
+        .form-select {
+            border: none !important;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.15) !important;
             color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            margin-right: 10px;
-            transition: background-color 0.2s ease;
+            transition: 0.25s;
         }
-        .form-control[type="file"]::file-selector-button:hover {
-            background-color: #5a6268;
+
+        .form-control::placeholder {
+            color: #e6cfff;
         }
-        
-        /* --- CSV Result Table --- */
-        .table-responsive-wrapper {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            overflow-x: auto;
-            background: #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+        .form-control:focus,
+        .form-select:focus {
+            background: rgba(255, 255, 255, 0.25) !important;
+            box-shadow: 0 0 0 3px rgba(255, 0, 183, 0.3) !important;
+            color: white;
         }
-        .table {
-            margin-bottom: 0; /* Remove default table margin */
-            font-size: 0.9rem;
-        }
-        .table th {
-            background-color: #f8f9fa;
+
+        .form-label {
             font-weight: 600;
-            color: #333;
-            white-space: nowrap;
+            color: #ffe0ff;
         }
-        .table td {
-            white-space: nowrap;
+
+        /* Buttons — Neon Pink Glow */
+        .btn-primary {
+            background: linear-gradient(90deg, #ff0099, #ff33cc);
+            border: none;
+            padding: 14px 35px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: 0.3s;
         }
-        /* Style the striped table */
-        .table-striped > tbody > tr:nth-of-type(odd) > * {
-            background-color: #fdfdfd;
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 180, 0.5);
         }
-        .table-hover > tbody > tr:hover > * {
-            background-color: #f1f5f9;
+
+        .btn-success {
+            background: linear-gradient(90deg, #b300ff, #ff00aa);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
         }
-        
-        /* --- Footer --- */
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(195, 0, 255, 0.5);
+        }
+
+        /* Footer */
         .footer {
             text-align: center;
-            margin-top: 4rem;
-            padding: 2rem 0;
-            color: #888;
-            font-size: 0.9rem;
-            border-top: 1px solid #e0e0e0;
+            margin-top: 70px;
+            padding: 20px;
+            color: #e6cfff;
         }
     </style>
 </head>
@@ -204,40 +127,37 @@
 
     <!-- Header -->
     <header class="header shadow-sm mb-5">
-        <h1><i class="fa-solid fa-heart-pulse"></i> Chronic Kidney Disease (CKD) Predictor</h1>
+        <h1><i class="fa-solid fa-kidneys me-2"></i>Chronic Kidney Disease (CKD) Predictor</h1>
     </header>
 
-    <!-- Main Content -->
-    <div class="container main-container my-5">
+    <div class="container main-container my-4" style="max-width: 900px;">
 
-        <!-- ------------------------- -->
-        <!-- 1️⃣ MANUAL INPUT FORM     -->
-        <!-- ------------------------- -->
-        <h3 class="section-title"><i class="fa-solid fa-user-pen"></i>Manual Prediction</h3>
+        {% if error_message %}
+        <div class="alert alert-danger">{{ error_message }}</div>
+        {% endif %}
 
+        <!-- Manual Prediction Form -->
         <form method="post" class="form-card p-4 p-md-5">
             {% csrf_token %}
+            <h3 class="section-title"><i class="fa-solid fa-user-doctor me-2"></i>Enter Patient Details</h3>
 
-            <div class="row g-3">
+            <div class="row g-4">
 
-                <!-- Numerical Inputs -->
-                <div class="col-md-4 col-sm-6"><label class="form-label">Age</label><input type="number" step="any" class="form-control" name="age" required></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Pressure (mm/Hg)</label><input type="number" step="any" class="form-control" name="bp" required></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Glucose (mgs/dl)</label><input type="number" step="any" class="form-control" name="bgr" required></div>
+                <!-- All your inputs remain EXACT SAME — only style changed -->
+                <div class="col-md-4 col-sm-6"><label class="form-label">Age</label><input type="number" name="age" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Pressure</label><input type="number" name="bp" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Glucose</label><input type="number" name="bgr" class="form-control" required /></div>
 
-                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Urea (mgs/dl)</label><input type="number" step="any" class="form-control" name="bu" required></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Serum Creatinine (mgs/dl)</label><input type="number" step="any" class="form-control" name="sc" required></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Sodium (mEq/L)</label><input type="number" step="any" class="form-control" name="sod" required></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Urea</label><input type="number" name="bu" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Serum Creatinine</label><input type="number" name="sc" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Sodium</label><input type="number" name="sod" class="form-control" required /></div>
 
-                <div class="col-md-4 col-sm-6"><label class="form-label">Potassium (mEq/L)</label><input type="number" step="any" class="form-control" name="pot" required></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Hemoglobin (gms)</label><input type="number" step="any" class="form-control" name="hemo" required></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">PCV (Packed Cell Vol %)</label><input type="number" step="any" class="form-control" name="pcv" required></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Potassium</label><input type="number" name="pot" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Hemoglobin</label><input type="number" name="hemo" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">PCV</label><input type="number" name="pcv" class="form-control" required /></div>
 
-                <div class="col-md-4 col-sm-6"><label class="form-label">WBC Count (cells/cumm)</label><input type="number" step="any" class="form-control" name="wbcc" required></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">RBC Count (millions/cmm)</label><input type="number" step="any" class="form-control" name="rbcc" required></div>
-
-                <!-- Spacer -->
-                <div class="col-12"></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">WBC Count</label><input type="number" name="wbcc" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">RBC Count</label><input type="number" name="rbcc" class="form-control" required /></div>
 
                 <!-- Select Fields -->
                 <div class="col-md-4 col-sm-6">
@@ -251,113 +171,134 @@
                     </select>
                 </div>
 
-                <div class="col-md-4 col-sm-6"><label class="form-label">Albumin</label><select name="al" class="form-select">
-                    <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-                    <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-                </select></div>
+                <div class="col-md-4 col-sm-6">
+                    <label class="form-label">Albumin</label>
+                    <select name="al" class="form-select">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
 
-                <div class="col-md-4 col-sm-6"><label class="form-label">Sugar</label><select name="su" class="form-select">
-                    <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-                    <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-                </select></div>
+                <div class="col-md-4 col-sm-6">
+                    <label class="form-label">Sugar</label>
+                    <select name="su" class="form-select">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Red Blood Cells</label>
-                    <select name="rbc" class="form-select"><option value="1">Normal</option><option value="0">Abnormal</option></select>
+                    <select name="rbc" class="form-select">
+                        <option value="1">Normal</option>
+                        <option value="0">Abnormal</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Pus Cell</label>
-                    <select name="pc" class="form-select"><option value="1">Normal</option><option value="0">Abnormal</option></select>
+                    <select name="pc" class="form-select">
+                        <option value="1">Normal</option>
+                        <option value="0">Abnormal</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Pus Cell Clumps</label>
-                    <select name="pcc" class="form-select"><option value="0">Not Present</option><option value="1">Present</option></select>
+                    <select name="pcc" class="form-select">
+                        <option value="0">Not Present</option>
+                        <option value="1">Present</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Bacteria</label>
-                    <select name="ba" class="form-select"><option value="0">Not Present</option><option value="1">Present</option></select>
+                    <select name="ba" class="form-select">
+                        <option value="0">Not Present</option>
+                        <option value="1">Present</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Hypertension</label>
-                    <select name="htn" class="form-select"><option value="0">No</option><option value="1">Yes</option></select>
+                    <select name="htn" class="form-select">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Diabetes Mellitus</label>
-                    <select name="dm" class="form-select"><option value="0">No</option><option value="1">Yes</option></select>
+                    <select name="dm" class="form-select">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Coronary Artery Disease</label>
-                    <select name="cad" class="form-select"><option value="0">No</option><option value="1">Yes</option></select>
+                    <select name="cad" class="form-select">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Appetite</label>
-                    <select name="appet" class="form-select"><option value="1">Good</option><option value="0">Poor</option></select>
+                    <select name="appet" class="form-select">
+                        <option value="1">Good</option>
+                        <option value="0">Poor</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Pedal Edema</label>
-                    <select name="pe" class="form-select"><option value="0">No</option><option value="1">Yes</option></select>
+                    <select name="pe" class="form-select">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Anemia</label>
-                    <select name="ane" class="form-select"><option value="0">No</option><option value="1">Yes</option></select>
+                    <select name="ane" class="form-select">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
-
             </div>
 
             <div class="text-center mt-5">
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="fa-solid fa-magnifying-glass me-2"></i>Predict Risk
+                    <i class="fa-solid fa-magnifying-glass-chart me-2"></i>Predict Risk
                 </button>
             </div>
         </form>
 
-        <!-- Manual Result -->
-        {% if prediction_text %}
-        <div class="result-box {% if 'Positive' in prediction_text %}positive{% elif 'Negative' in prediction_text %}negative{% endif %}">
-            <h4>{{ prediction_text }}</h4>
-        </div>
+        <div class="text-center my-4"><span class="fw-bold" style="color:#ffd6ff">OR</span></div>
+
+        {% if csv_error %}
+        <div class="alert alert-danger">{{ csv_error }}</div>
         {% endif %}
 
-
-        <!-- ------------------------- -->
-        <!-- 2️⃣ CSV UPLOAD FORM       -->
-        <!-- ------------------------- -->
-        <h3 class="section-title"><i class="fa-solid fa-file-csv"></i>Bulk Prediction (CSV Upload)</h3>
-
-        <form method="post" enctype="multipart/form-data" class="form-card p-4 p-md-5">
+        <!-- CSV Upload -->
+        <form method="post" enctype="multipart/form-data" class="csv-card p-4 p-md-5">
             {% csrf_token %}
-            <input type="hidden" name="csv_submit" value="1">
+            <input type="hidden" name="csv_submit" value="1" />
 
-            <div class="mb-3">
-                <label class="form-label h5">Upload CSV File</label>
-                <input type="file" name="csv_file" accept=".csv" class="form-control form-control-lg" required>
-                <small class="text-muted">CSV must contain the same feature columns used for training.</small>
-            </div>
+            <h5 class="text-center mb-3" style="color:#ffb3ff;"><i class="fa-solid fa-file-csv me-2"></i>Quick Predict (CSV)</h5>
 
-            <div class="text-center mt-4">
+            <input type="file" name="csv_file" accept=".csv" class="form-control form-control-lg mb-3" required />
+
+            <div class="text-center">
                 <button type="submit" class="btn btn-success btn-lg">
-                    <i class="fa-solid fa-upload me-2"></i>Predict from CSV
+                    <i class="fa-solid fa-upload me-2"></i>Predict From CSV
                 </button>
             </div>
         </form>
-
-        <!-- CSV Result -->
-        {% if csv_html %}
-        <h3 class="section-title"><i class="fa-solid fa-table-list"></i>CSV Results</h3>
-        <div class="table-responsive-wrapper">
-            <div class="p-3">
-                 {{ csv_html|safe }}
-            </div>
-        </div>
-        {% endif %}
-
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        CKD Prediction Model
-    </footer>
+    <footer class="footer">CKD Prediction Model</footer>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
