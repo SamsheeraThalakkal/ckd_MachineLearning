@@ -275,7 +275,8 @@ def home(request):
 # =====================================================
 def predict_ckd(request):
     global MODEL, SCALER, FEATURE_COLUMNS
-
+    if 'report_data' in request.session:
+        del request.session['report_data']
     # Check if model is loaded
     if MODEL is None or SCALER is None or FEATURE_COLUMNS is None:
         load_or_train_model() # Try to load/train again
@@ -294,6 +295,7 @@ def predict_ckd(request):
 
         try:
             df_display = pd.read_csv(csv_file)
+            report_data = df_display.iloc[0].to_dict() 
             
             # --- NEW LOGIC: Preprocess and get FIRST ROW ---
             df_processed = preprocess_data(df_display.copy()) 
@@ -311,6 +313,8 @@ def predict_ckd(request):
             
             # CORRECTED LOGIC: Set text result instead of HTML table
             prediction_text = "CKD Positive" if prediction == 1 else "CKD Negative"
+            report_data['Prediction'] = prediction_text
+            request.session['report_data'] = report_data
 
         except Exception as e:
             prediction_text = f"Error processing CSV file: {e}. Make sure the CSV format is correct."
@@ -320,16 +324,45 @@ def predict_ckd(request):
 
     # ================= MANUAL FORM (POST request) =================
     if request.method == "POST":
+        report_data = {}
         prediction_text = None
+        report_data = {
+                'Age': request.POST.get('age'),
+                'BP': request.POST.get('bp'),
+                'Blood Glucose': request.POST.get('bgr'),
+                'Blood Urea': request.POST.get('bu'),
+                'Serum Creatinine': request.POST.get('sc'),
+                'Sodium': request.POST.get('sod'),
+                'Potassium': request.POST.get('pot'),
+                'Hemoglobin': request.POST.get('hemo'),
+                'PCV': request.POST.get('pcv'),
+                'WBC': request.POST.get('wbcc'),
+                'RBC': request.POST.get('rbcc'),
+                'Specific Gravity': request.POST.get('sg'),
+                'Albumin': request.POST.get('al'),
+                'Sugar': request.POST.get('su'),
+                'red Blood Cells': request.POST.get('rbc'),
+                'Pus Cell': request.POST.get('pc'),
+                'Pus Cell Clumps': request.POST.get('pcc'),
+                'Bacteria': request.POST.get('ba'),
+                'Hypertension': request.POST.get('htn'),
+                'Diabetes Mellitus': request.POST.get('dm'),
+                'Coronary Artery Disease': request.POST.get('cad'),
+                'Appetite': request.POST.get('appet'),
+                'Pedal Edema': request.POST.get('pe'),
+                'Anemia': request.POST.get('ane'),
+                # add any additional fields from your form
+            }
         try:
             df = preprocess_input_manual(request.POST)
             df_scaled = SCALER.transform(df)
             result = MODEL.predict(df_scaled)[0]
             prediction_text = "CKD Positive" if result == 1 else "CKD Negative"
-        
+            report_data['Prediction'] = prediction_text
+            request.session['report_data'] = report_data
         except Exception as e:
             prediction_text = f"Error during prediction: {e}"
-
+        
         # Render the result
         return render(request, "app/result.html", {
             "prediction_text": prediction_text
@@ -337,6 +370,94 @@ def predict_ckd(request):
 
     # ================= INITIAL GET REQUEST =================
     return render(request, "app/predict.html", {})
+
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+import csv
+
+def patient_report(request):
+    # Fetch patient data from session
+    report_data = request.session.get('report_data')
+    if not report_data:
+        return render(request, 'app/report.html', {'error': 'No patient data found.'})
+
+    # Mapping from short CSV/form names to full display names
+    feature_name_map = {
+        'age': 'Age', 'bp': 'Blood Pressure', 'bgr': 'Blood Glucose',
+        'bu': 'Blood Urea', 'sc': 'Serum Creatinine', 'sod': 'Sodium',
+        'pot': 'Potassium', 'hemo': 'Hemoglobin', 'pcv': 'PCV',
+        'wbcc': 'WBC Count', 'rbcc': 'RBC Count', 'sg': 'Specific Gravity',
+        'al': 'Albumin', 'su': 'Sugar', 'rbc': 'Red Blood Cells',
+        'pc': 'Pus Cell', 'pcc': 'Pus Cell Clumps', 'ba': 'Bacteria',
+        'htn': 'Hypertension', 'dm': 'Diabetes Mellitus',
+        'cad': 'Coronary Artery Disease', 'appet': 'Appetite',
+        'pe': 'Pedal Edema', 'ane': 'Anemia', 'Prediction': 'Prediction'
+    }
+
+    # Normal ranges and units only for numeric features
+    normal_ranges = {
+        'Age': ('0-130', 'years'), 'Blood Pressure': ('80 – 120', 'mm/Hg'),
+        'Blood Glucose': ('70 – 140', 'mgs/dL'), 'Blood Urea': ('6 – 21(F), 8 – 24(M)', 'mgs/dL'),
+        'Serum Creatinine': ('0.6 – 1.1(F), 0.7 – 1.3(M)', 'mgs/dL'), 'Sodium': ('135 – 145', 'mEq/L'),
+        'Potassium': ('3.5 – 5.2', 'mEq/L'), 'Hemoglobin': ('12 – 15.5(F), 13.5 – 17.5(M)', 'gms'),
+        'PCV': ('37 – 47(F), 40 – 54(M)', '%'), 'WBC Count': ('4000 – 11000', 'cells/cumm'),
+        'RBC Count': ('4.2 – 5.4(F), 4.7 – 6.1(M)', 'million/cmm'),
+        'Specific Gravity': ('1.005 – 1.030', '—'), 'Albumin': ('0-30', 'mg/g'),
+        'Sugar': ('0-15', 'mg/dL')
+    }
+
+    # Binary/categorical features
+    binary_features = ['Red Blood Cells', 'Pus Cell', 'Pus Cell Clumps', 'Bacteria',
+                       'Hypertension', 'Diabetes Mellitus', 'Coronary Artery Disease',
+                       'Appetite', 'Pedal Edema', 'Anemia']
+
+    # Prepare report list
+    report_list = []
+    for key, value in report_data.items():
+        feature = feature_name_map.get(key, key)
+
+        # Only numeric features get normal range/unit
+        if feature in binary_features or feature == 'Prediction':
+            normal, unit = ('-', '-')
+        else:
+            normal, unit = normal_ranges.get(feature, ('-', '-'))
+
+        # Map 0/1 to human-readable
+        if feature in ['Red Blood Cells', 'Pus Cell']:
+            display_value = 'Normal' if str(value) in ['0','0.0'] else 'Abnormal'
+        elif feature in ['Pus Cell Clumps', 'Bacteria']:
+            display_value = 'Not Present' if str(value) in ['0','0.0'] else 'Present'
+        elif feature in ['Hypertension','Diabetes Mellitus','Coronary Artery Disease',
+                         'Appetite','Pedal Edema','Anemia']:
+            display_value = 'No' if str(value) in ['0','0.0'] else 'Yes'
+        else:
+            display_value = value
+
+        report_list.append({
+            'feature': feature,
+            'value': display_value,
+            'normal': normal,
+            'unit': unit
+        })
+
+    # CSV download
+    if 'download' in request.GET:
+        import csv
+        from django.http import HttpResponse
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="patient_report.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Feature', 'Value', 'Normal Range', 'Unit'])
+        for row in report_list:
+            writer.writerow([row['feature'], row['value'], row['normal'], row['unit']])
+        return response
+
+    return render(request, 'app/report.html', {'report_list': report_list})
+
+
+
+
 
 def reference(request):
     return render(request, "app/reference.html")
