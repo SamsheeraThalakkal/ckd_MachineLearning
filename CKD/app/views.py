@@ -223,28 +223,42 @@ def preprocess_input_manual(data):
                 value = 0
             input_dict[col] = float(value)
 
-    # Handle OHE (sg, al, su)
+   # Handle OHE (sg, al, su) with closest value mapping
     sg = float(data.get("sg", 0))
     al = float(data.get("al", 0))
     su = float(data.get("su", 0))
 
+    # Define known categories
+    sg_values = [1.010, 1.015, 1.020, 1.025]
+    al_values = [1, 2, 3, 4, 5]
+    su_values = [1, 2, 3, 4, 5]
+
+    # Map to closest known value
+    def closest(val, valid_list):
+        return min(valid_list, key=lambda x: abs(x - val))
+
+    sg_mapped = closest(sg, sg_values)
+    al_mapped = closest(al, al_values)
+    su_mapped = closest(su, su_values)
+
     # SG
-    for val in [1.010, 1.015, 1.020, 1.025]:
+    for val in sg_values:
         colname = f"specific_gravity_{val}"
         if colname in input_dict:
-            input_dict[colname] = 1 if sg == val else 0
+            input_dict[colname] = 1 if val == sg_mapped else 0
 
     # Albumin
-    for val in [1, 2, 3, 4, 5]:
+    for val in al_values:
         colname = f"albumin_{val}"
         if colname in input_dict:
-            input_dict[colname] = 1 if al == val else 0
+            input_dict[colname] = 1 if val == al_mapped else 0
 
     # Sugar
-    for val in [1, 2, 3, 4, 5]:
+    for val in su_values:
         colname = f"sugar_{val}"
         if colname in input_dict:
-            input_dict[colname] = 1 if su == val else 0
+            input_dict[colname] = 1 if val == su_mapped else 0
+
 
     return pd.DataFrame([input_dict])[FEATURE_COLUMNS]
 
@@ -323,3 +337,6 @@ def predict_ckd(request):
 
     # ================= INITIAL GET REQUEST =================
     return render(request, "app/predict.html", {})
+
+def reference(request):
+    return render(request, "app/reference.html")

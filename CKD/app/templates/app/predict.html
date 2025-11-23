@@ -12,6 +12,35 @@
 
     <style>
         /* 🌌 THEME 1B — Deep Purple + Neon Pink */
+
+   /* Container for top-right buttons */
+.top-right-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;   /* space between buttons */
+    z-index: 9999;
+}
+
+/* Individual button style */
+.top-right-buttons a {
+    background: linear-gradient(90deg, #055505, #1da133);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 15px rgba(255, 0, 180, 0.4);
+    transition: 0.3s;
+}
+
+.top-right-buttons a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(21, 202, 127, 0.6);
+}
+
+
         body {
             font-family: "Inter", sans-serif;
             background: linear-gradient(135deg, #1a0033, #2a0055, #3f0077);
@@ -120,15 +149,26 @@
             padding: 20px;
             color: #e6cfff;
         }
+        .form-select option {
+    color: #f0e6ff !important;
+    background-color: #2a0047 !important;
+}
+
     </style>
 </head>
 
 <body>
 
+
     <!-- Header -->
     <header class="header shadow-sm mb-5">
         <h1><i class="fa-solid fa-kidneys me-2"></i>Chronic Kidney Disease (CKD) Predictor</h1>
     </header>
+    <div class="top-right-buttons">
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'reference' %}">Reference</a>
+</div>
+
 
     <div class="container main-container my-4" style="max-width: 900px;">
 
@@ -144,122 +184,134 @@
             <div class="row g-4">
 
                 <!-- All your inputs remain EXACT SAME — only style changed -->
-                <div class="col-md-4 col-sm-6"><label class="form-label">Age</label><input type="number" name="age" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Pressure</label><input type="number" name="bp" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Glucose</label><input type="number" name="bgr" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Age(Years)</label><input type="number" step="1" min="1" max="120" name="age" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Pressure(mm/Hg)</label><input type="number" min="1" step="1" name="bp" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Glucose(mgs/dL)</label><input type="number" min="1" step="1" name="bgr" class="form-control" required /></div>
 
-                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Urea</label><input type="number" name="bu" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Serum Creatinine</label><input type="number" name="sc" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Sodium</label><input type="number" name="sod" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Blood Urea(mgs/dL)</label><input type="number" min="1" step="any" name="bu" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Serum Creatinine(mgs/dL)</label><input type="number" min="1" step="any" name="sc" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Sodium(mEq/L)</label><input type="number" min="1" step="any" name="sod" class="form-control" required /></div>
 
-                <div class="col-md-4 col-sm-6"><label class="form-label">Potassium</label><input type="number" name="pot" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Hemoglobin</label><input type="number" name="hemo" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">PCV</label><input type="number" name="pcv" class="form-control" required /></div>
-
-                <div class="col-md-4 col-sm-6"><label class="form-label">WBC Count</label><input type="number" name="wbcc" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">RBC Count</label><input type="number" name="rbcc" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Potassium(mEq/L)</label><input type="number" step="any" min="1" name="pot" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Hemoglobin(gms)</label><input type="number" step="any" min="1" name="hemo" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">PCV(%)</label><input type="number" step="1" min="1" name="pcv" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">WBC Count(cells/cumm)</label><input type="number" min="1" step="1" name="wbcc" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">RBC Count(millions/cmm)</label><input type="number" min="1" step="any" name="rbcc" class="form-control" required /></div>
 
                 <!-- Select Fields -->
                 <div class="col-md-4 col-sm-6">
                     <label class="form-label">Specific Gravity</label>
-                    <select name="sg" class="form-select">
+                    <input type="number" name="sg" min="1" step="any" class="form-control" required />
+                    <!-- <select name="sg" class="form-select">
                         <option value="1.005">1.005</option>
                         <option value="1.010">1.010</option>
                         <option value="1.015">1.015</option>
                         <option value="1.020">1.020</option>
                         <option value="1.025">1.025</option>
-                    </select>
+                    </select> -->
                 </div>
 
                 <div class="col-md-4 col-sm-6">
-                    <label class="form-label">Albumin</label>
-                    <select name="al" class="form-select">
+                    <label class="form-label">Albumin(g/dL)</label>
+                    <input type="number" name="al" min="1" step="1" class="form-control" required />
+                    <!-- <select name="al" class="form-select">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
-                    </select>
+                    </select> -->
                 </div>
 
                 <div class="col-md-4 col-sm-6">
-                    <label class="form-label">Sugar</label>
-                    <select name="su" class="form-select">
+                    <label class="form-label">Sugar(mmol/L)</label>
+                    <input type="number" name="su" step="1" min="1" class="form-control" required />
+                    <!-- <select name="su" class="form-select">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
-                    </select>
+                    </select> -->
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Red Blood Cells</label>
-                    <select name="rbc" class="form-select">
+                    <select name="rbc" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="1">Normal</option>
                         <option value="0">Abnormal</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Pus Cell</label>
-                    <select name="pc" class="form-select">
+                    <select name="pc" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="1">Normal</option>
                         <option value="0">Abnormal</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Pus Cell Clumps</label>
-                    <select name="pcc" class="form-select">
+                    <select name="pcc" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="0">Not Present</option>
                         <option value="1">Present</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Bacteria</label>
-                    <select name="ba" class="form-select">
+                    <select name="ba" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="0">Not Present</option>
                         <option value="1">Present</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Hypertension</label>
-                    <select name="htn" class="form-select">
+                    <select name="htn" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Diabetes Mellitus</label>
-                    <select name="dm" class="form-select">
+                    <select name="dm" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Coronary Artery Disease</label>
-                    <select name="cad" class="form-select">
+                    <select name="cad" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Appetite</label>
-                    <select name="appet" class="form-select">
+                    <select name="appet" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="1">Good</option>
                         <option value="0">Poor</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Pedal Edema</label>
-                    <select name="pe" class="form-select">
+                    <select name="pe" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Anemia</label>
-                    <select name="ane" class="form-select">
+                    <select name="ane" class="form-select" required>
+                        <option value="" disabled selected>--select--</option>
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>

@@ -11,18 +11,33 @@
 
     <style>
         body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+
+    background: url('https://thumbs.dreamstime.com/b/microscopic-view-red-blood-cells-flowing-network-transparent-blood-vessels-blue-background-microscopic-view-369676547.jpg') no-repeat center center fixed;
+    background-size: cover;
+
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+        /* body {
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
 
-            /* Lighter premium gradient */
-            background: linear-gradient(135deg, #f5e1ff 0%, #e6c8ff 35%, #d1a4ff 100%);
+            /* Lighter premium gradient 
+            background: linear-gradient(135deg, #0e3ea5 0%, #1c0449 35%, #690dc5 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow-x: hidden;
-        }
+        } */
 
         /* Main container */
         .glass-wrapper {
@@ -54,14 +69,15 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
             font-size: 2.6rem;
-            color: #2d004d;
+            color: #06010a;
         }
 
         .info-section p.lead {
             font-size: 1.05rem;
+            font-weight: 500;
             opacity: 0.9;
             max-width: 500px;
-            color: #3a005f;
+            color: #0a040e;
         }
 
         /* Right section icon */
@@ -87,7 +103,7 @@
 
         /* Button */
         .btn-start {
-            background: #b800e6;
+            background: #0e0752;
             border: none;
             padding: 14px 42px;
             font-size: 1.15rem;
@@ -113,9 +129,31 @@
         .info-link:hover {
             color: #4b006d;
         }
+            .top-right-link {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.top-right-link a {
+    color: #ffffff;
+    background: #6a0dad;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.top-right-link a:hover {
+    background: #892be2;
+}
     </style>
 </head>
 <body>
+    <div class="top-right-link">
+    <a href="{% url 'reference' %}">Reference Ranges</a>
+</div>
 
     <div class="glass-wrapper">
         <div class="glass-card">
@@ -127,8 +165,8 @@
                     <h1 class="mb-3">CKD Risk Prediction</h1>
 
                     <p class="lead">
-                        Early detection of Chronic Kidney Disease (CKD) is crucial. Identifying risk factors at an early stage helps prevent kidney failure and supports better long-term health.
-                        This AI-powered tool assists in screening by analyzing key clinical parameters.
+                       <h4> Early detection of Chronic Kidney Disease (CKD) is crucial. Identifying risk factors at an early stage helps prevent kidney failure and supports better long-term health.
+                        This AI-powered tool assists in screening by analyzing key clinical parameters.</h4>
                     </p>
 
                     <div class="my-3">
@@ -146,11 +184,16 @@
                         <a class="info-link" href="https://www.kidney.org/atoz/content/about-chronic-kidney-disease" target="_blank">www.kidney.org</a>
                     </p>
                 </div>
+<div class="col-lg-5 text-center">
+    <img src="https://pharmaphorum.com/sites/default/files/styles/x_large/public/2023-03/kidney-disease.jpg?itok=6LRFjvRG"
+    alt="kidney image"     
+    style="width: 250px; height: 250px;">
+</div>
 
-                <!-- Right Section (Icon / Visual) -->
+                <!-- Right Section (Icon / Visual)
                 <div class="col-lg-5 text-center">
                     <i class="fa-solid fa-heart-pulse hero-icon"></i>
-                </div>
+                </div> -->
 
             </div>
         </div>

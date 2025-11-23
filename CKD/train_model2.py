@@ -14,7 +14,7 @@ from imblearn.over_sampling import SMOTE
 import warnings
 import pickle
 import os
-
+import shap
 warnings.filterwarnings('ignore')
 
 # Create models directory if it doesn't exist
@@ -175,6 +175,26 @@ def main():
     print("--- Saved Random Forest model to models/random_forest_model.pkl ---")
     
     plot_confusion_and_roc(y_test, y_pred_rf_test, y_proba_rf_test, "Random Forest")
+    # ---------------- Random Forest Feature Importance ----------------
+    rf_importances = pd.Series(rf_model.feature_importances_, index=X.columns)
+
+    # Sort and take top 10
+    top_rf_features = rf_importances.sort_values(ascending=False).head(10)
+
+    # Save importances to CSV
+    rf_importances.to_csv('models/rf_feature_importances.csv')
+    print("--- Saved RF feature importances to models/rf_feature_importances.csv ---")
+
+    # Plot
+    plt.figure(figsize=(8, 5))
+    sns.barplot(x=top_rf_features.values, y=top_rf_features.index, palette="mako")
+    plt.title("Top 10 Important Features - Random Forest")
+    plt.xlabel("Feature Importance")
+    plt.ylabel("Feature")
+    plt.tight_layout()
+    plt.savefig('models/rf_feature_importance_plot.png')
+    plt.show()
+
 
     # ---------------- LightGBM (OPTIMIZED) ----------------
     print("\n--- Training LightGBM with Optimized Parameters ---")
@@ -205,6 +225,68 @@ def main():
         eval_set=[(X_val, y_val)],
         callbacks=[lgb.early_stopping(stopping_rounds=30, verbose=False)]
     )
+
+
+
+
+    # ==================== SHAP EXPLANATION (UPDATED FINAL) ====================
+    print("\n\n================ SHAP EXPLANATION ================")
+
+    # Create explainer
+    explainer = shap.TreeExplainer(best_lgb)
+
+    # Compute SHAP values
+    raw_shap = explainer.shap_values(X_test_scaled)
+
+    # LightGBM returns SHAP as list → use class 1 (CKD)
+    if isinstance(raw_shap, list):
+        shap_values = raw_shap[1]
+    else:
+        shap_values = raw_shap
+
+    # ================= SUMMARY PLOT ==================
+    plt.figure()
+    shap.summary_plot(shap_values, X_test, feature_names=X.columns, show=False)
+    plt.tight_layout()
+    plt.savefig("models/shap_summary_plot.png", bbox_inches='tight')
+    plt.close()
+    print("--- SHAP summary plot saved ---")
+
+    # ================= FORCE PLOT (fixed) ==================
+    index = 10  # change this index for different patient
+    print(f"\nGenerating force plot for test sample index = {index}")
+
+    # Convert force plot → matplotlib avoids overlap
+    plt.figure(figsize=(11, 3))  # wider layout avoids overlap
+    shap.force_plot(
+        explainer.expected_value[1] if isinstance(explainer.expected_value, list) else explainer.expected_value,
+        shap_values[index],
+        X_test.iloc[index],
+        matplotlib=True
+    )
+    plt.tight_layout()
+    plt.savefig("models/shap_force_plot.png", dpi=300, bbox_inches='tight')
+    plt.close()
+    print("--- SHAP force plot saved ---")
+
+    # ================= PRINT SHAP VALUES FOR THIS INSTANCE ==================
+    print("\n======= SHAP Values for Test Sample", index, "=======")
+
+    instance_shap = pd.DataFrame({
+        "Feature": X.columns,
+        "SHAP Value": shap_values[index],
+        "Feature Value": X_test.iloc[index].values
+    }).sort_values(by="SHAP Value", ascending=False)
+
+    print(instance_shap.to_string(index=False))
+
+    print("\nTotal SHAP contribution =", shap_values[index].sum())
+
+
+
+
+
+
 
     # Evaluate LightGBM
     y_pred_lgb_test = best_lgb.predict(X_test_scaled)

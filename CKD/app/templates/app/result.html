@@ -17,6 +17,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+            .top-right-link {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.top-right-link a {
+    color: #ffffff;
+    background: #6a0dad;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.top-right-link a:hover {
+    background: #892be2;
+}
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f4f7f6;
@@ -209,7 +228,9 @@
 </head>
 
 <body>
-
+  <div class="top-right-link">
+    <a href="{% url 'reference' %}">Reference Ranges</a>
+</div>
     <!-- Header -->
     <header class="header shadow-sm mb-5">
         <h1><i class="fa-solid fa-chart-line"></i> Prediction Result</h1>

@@ -4,5 +4,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('predict/', views.predict_ckd, name='predict'),
+    path('reference/', views.reference, name='reference'),
 
 ]
