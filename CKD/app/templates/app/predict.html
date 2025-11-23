@@ -192,7 +192,7 @@
                 <div class="col-md-4 col-sm-6"><label class="form-label">Blood Glucose(mgs/dL)</label><input type="number" min="1" step="1" name="bgr" class="form-control" required /></div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Blood Urea(mgs/dL)</label><input type="number" min="1" step="any" name="bu" class="form-control" required /></div>
-                <div class="col-md-4 col-sm-6"><label class="form-label">Serum Creatinine(mgs/dL)</label><input type="number" min="1" step="any" name="sc" class="form-control" required /></div>
+                <div class="col-md-4 col-sm-6"><label class="form-label">Serum Creatinine(mgs/dL)</label><input type="number" min="0" step="any" name="sc" class="form-control" required /></div>
                 <div class="col-md-4 col-sm-6"><label class="form-label">Sodium(mEq/L)</label><input type="number" min="1" step="any" name="sod" class="form-control" required /></div>
 
                 <div class="col-md-4 col-sm-6"><label class="form-label">Potassium(mEq/L)</label><input type="number" step="any" min="1" name="pot" class="form-control" required /></div>
@@ -216,7 +216,7 @@
 
                 <div class="col-md-4 col-sm-6">
                     <label class="form-label">Albumin(g/dL)</label>
-                    <input type="number" name="al" min="1" step="1" class="form-control" required />
+                    <input type="number" name="al" min="0" step="1" class="form-control" required />
                     <!-- <select name="al" class="form-select">
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -229,7 +229,7 @@
 
                 <div class="col-md-4 col-sm-6">
                     <label class="form-label">Sugar(mmol/L)</label>
-                    <input type="number" name="su" step="1" min="1" class="form-control" required />
+                    <input type="number" name="su" step="1" min="0" class="form-control" required />
                     <!-- <select name="su" class="form-select">
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -345,7 +345,7 @@
 
             <div class="text-center">
                 <button type="submit" class="btn btn-success btn-lg">
-                    <i class="fa-solid fa-upload me-2"></i>Predict From CSV
+                    <i class="fa-solid fa-upload me-2"></i>Predict Risk
                 </button>
             </div>
         </form>

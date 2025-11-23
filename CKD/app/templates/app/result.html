@@ -17,25 +17,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-            .top-right-link {
-    position: absolute;
+  
+/* Make both top-right buttons the same size */
+.top-right-buttons {
+    position: fixed;
     top: 20px;
-    right: 20px;
+    right: 20px;       /* keeps container on the right */
+    display: flex;
+     /* stack buttons vertically */
+    gap: 12px;             /* space between buttons */
+    z-index: 9999;
+    align-items: flex-end;  /* aligns buttons to the right inside container */
 }
 
-.top-right-link a {
-    color: #ffffff;
-    background: #6a0dad;
-    padding: 8px 16px;
-    border-radius: 8px;
+.top-right-buttons a {
+    background: linear-gradient(90deg, #03411d, #08db48);
+    color: white;
+    padding: 10px 22px;   
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;      
     text-decoration: none;
-    font-weight: bold;
+    box-shadow: 0 6px 15px rgba(3, 48, 2, 0.4);
+    text-align: center;
     transition: 0.3s;
 }
 
-.top-right-link a:hover {
-    background: #892be2;
+.top-right-buttons a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(50, 226, 6, 0.6);
 }
+
+
+
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f4f7f6;
@@ -44,11 +59,11 @@
 
         /* --- Header --- */
         .header {
-            background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
+            background: linear-gradient(90deg, #052252, #091961, #082547);
             color: white;
             padding: 1.5rem 0;
             text-align: center;
-            border-bottom: 5px solid #0041a8;
+            border-bottom: 5px solid #132849;
         }
         .header h1 {
             font-weight: 700;
@@ -110,11 +125,11 @@
         }
         
         .btn-primary-custom {
-            background-color: #0052D4;
+            background-color: #0c2a5a;
             color: white;
         }
         .btn-primary-custom:hover {
-            background-color: #0041a8;
+            background-color: #135fda;
             color: white;
         }
         
@@ -228,13 +243,15 @@
 </head>
 
 <body>
-  <div class="top-right-link">
-    <a href="{% url 'reference' %}">Reference Ranges</a>
+  <div class="top-right-buttons">
+   
+
+    <a href="{% url 'report' %}" class="btn btn-primary mt-3">View Full Report</a>
 </div>
-<a href="{% url 'report' %}" class="btn btn-primary mt-3">View Full Report</a>
+
     <!-- Header -->
     <header class="header shadow-sm mb-5">
-        <h1><i class="fa-solid fa-chart-line"></i> Prediction Result</h1>
+        <h1><i class="fa-solid fa-chart-line"></i> RESULT </h1>
     </header>
 
     <!-- Main Content -->
@@ -251,7 +268,7 @@
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
                 <h2>{{ prediction_text }}</h2>
-                <p>The model predicts a high risk of CKD. Please consult a healthcare professional.</p>
+                <p>The assessment indicates a high risk of CKD. Immediate medical consultation is advised.</p>
             </div>
             {% elif prediction_text == 'CKD Negative' %}
             <div class="manual-result-card negative">
@@ -259,7 +276,7 @@
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
                 <h2>{{ prediction_text }}</h2>
-                <p>The model predicts a low risk of CKD. Continue to maintain a healthy lifestyle.</p>
+                <p>The assessment indicates a low risk of CKD. Continue to maintain a healthy lifestyle.</p>
             </div>
             {% else %}
             <!-- Fallback for error messages -->

@@ -313,7 +313,7 @@ def predict_ckd(request):
             
             # CORRECTED LOGIC: Set text result instead of HTML table
             prediction_text = "CKD Positive" if prediction == 1 else "CKD Negative"
-            report_data['Prediction'] = prediction_text
+            report_data['Impression'] = prediction_text
             request.session['report_data'] = report_data
 
         except Exception as e:
@@ -328,7 +328,7 @@ def predict_ckd(request):
         prediction_text = None
         report_data = {
                 'Age': request.POST.get('age'),
-                'BP': request.POST.get('bp'),
+                'Blood Pressure': request.POST.get('bp'),
                 'Blood Glucose': request.POST.get('bgr'),
                 'Blood Urea': request.POST.get('bu'),
                 'Serum Creatinine': request.POST.get('sc'),
@@ -336,12 +336,12 @@ def predict_ckd(request):
                 'Potassium': request.POST.get('pot'),
                 'Hemoglobin': request.POST.get('hemo'),
                 'PCV': request.POST.get('pcv'),
-                'WBC': request.POST.get('wbcc'),
-                'RBC': request.POST.get('rbcc'),
+                'WBC Count': request.POST.get('wbcc'),
+                'RBC Count': request.POST.get('rbcc'),
                 'Specific Gravity': request.POST.get('sg'),
                 'Albumin': request.POST.get('al'),
                 'Sugar': request.POST.get('su'),
-                'red Blood Cells': request.POST.get('rbc'),
+                'Red Blood Cells': request.POST.get('rbc'),
                 'Pus Cell': request.POST.get('pc'),
                 'Pus Cell Clumps': request.POST.get('pcc'),
                 'Bacteria': request.POST.get('ba'),
@@ -358,7 +358,7 @@ def predict_ckd(request):
             df_scaled = SCALER.transform(df)
             result = MODEL.predict(df_scaled)[0]
             prediction_text = "CKD Positive" if result == 1 else "CKD Negative"
-            report_data['Prediction'] = prediction_text
+            report_data['Impression'] = prediction_text
             request.session['report_data'] = report_data
         except Exception as e:
             prediction_text = f"Error during prediction: {e}"
@@ -392,7 +392,7 @@ def patient_report(request):
         'pc': 'Pus Cell', 'pcc': 'Pus Cell Clumps', 'ba': 'Bacteria',
         'htn': 'Hypertension', 'dm': 'Diabetes Mellitus',
         'cad': 'Coronary Artery Disease', 'appet': 'Appetite',
-        'pe': 'Pedal Edema', 'ane': 'Anemia', 'Prediction': 'Prediction'
+        'pe': 'Pedal Edema', 'ane': 'Anemia', 'Impression': 'Impression'
     }
 
     # Normal ranges and units only for numeric features
@@ -418,7 +418,7 @@ def patient_report(request):
         feature = feature_name_map.get(key, key)
 
         # Only numeric features get normal range/unit
-        if feature in binary_features or feature == 'Prediction':
+        if feature in binary_features or feature == 'Impression':
             normal, unit = ('-', '-')
         else:
             normal, unit = normal_ranges.get(feature, ('-', '-'))
